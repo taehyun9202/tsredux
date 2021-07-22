@@ -1,1 +1,3 @@
-export const ADD_NOTE = "ADD_NOTE";
+export const POKEMON_LOADING = "POKEMON_LOADING";
+export const POKEMON_FAIL = "POKEMON_FAIL";
+export const POKEMON_SUCCESS = "POKEMSUCCESS";
