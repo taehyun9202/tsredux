@@ -1,27 +1,43 @@
 import { Dispatch } from "redux";
 import axios from "axios";
-import { POKEMON_LOADING, POKEMON_FAIL, POKEMON_SUCCESS } from "../types";
+import {
+  ALL_POKEMON_LOADING,
+  ALL_POKEMON_FAIL,
+  ALL_POKEMON_SUCCESS,
+  POKEMON_LOADING,
+  POKEMON_FAIL,
+  POKEMON_SUCCESS,
+} from "../types";
 
-export type PokemonName = {
+type PokemonName = {
   name: string;
 };
 
-export type PokemonAbility = {
+type PokemonAbility = {
   ability: {
     name: string;
     url: string;
   };
 };
 
-export type PokemonSprites = {
+type PokemonSprites = {
   front_default: string;
 };
 
-export type PokemonStat = {
+type PokemonStat = {
   base_stat: number;
   stat: {
     name: string;
   };
+};
+
+type PokemonURL = {
+  url: string;
+};
+
+export type PokemonList = {
+  name: PokemonName;
+  url: PokemonURL;
 };
 
 export type PokemonTypes = {
@@ -31,15 +47,30 @@ export type PokemonTypes = {
   stats: PokemonStat[];
 };
 
-export interface PokemonLoading {
+// pokemon list
+interface AllPokemonLoading {
+  type: typeof ALL_POKEMON_LOADING;
+}
+
+interface AllPokemonFail {
+  type: typeof ALL_POKEMON_FAIL;
+}
+
+interface AllPokemonSuccess {
+  type: typeof ALL_POKEMON_SUCCESS;
+  payload: PokemonTypes;
+}
+
+// single pokemon
+interface PokemonLoading {
   type: typeof POKEMON_LOADING;
 }
 
-export interface PokemonFail {
+interface PokemonFail {
   type: typeof POKEMON_FAIL;
 }
 
-export interface PokemonSuccess {
+interface PokemonSuccess {
   type: typeof POKEMON_SUCCESS;
   payload: PokemonTypes;
 }
@@ -47,9 +78,36 @@ export interface PokemonSuccess {
 export type PokemonDispatchTypes =
   | PokemonLoading
   | PokemonFail
-  | PokemonSuccess;
+  | PokemonSuccess
+  | AllPokemonLoading
+  | AllPokemonFail
+  | AllPokemonSuccess;
 
-export const getPoekmon =
+export const getAllPokemon =
+  () => async (dispatch: Dispatch<PokemonDispatchTypes>) => {
+    try {
+      dispatch({
+        type: ALL_POKEMON_LOADING,
+        payload: null,
+      });
+
+      const res = await axios.get(
+        "https://pokeapi.co/api/v2/pokemon?limit=151"
+      );
+
+      dispatch({
+        type: ALL_POKEMON_SUCCESS,
+        payload: res.data,
+      });
+    } catch (e) {
+      dispatch({
+        type: ALL_POKEMON_FAIL,
+      });
+      console.log(e);
+    }
+  };
+
+export const getPokemon =
   (pokemon: string) => async (dispatch: Dispatch<PokemonDispatchTypes>) => {
     try {
       dispatch({

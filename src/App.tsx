@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPoekmon } from "./store/actions/pokemonAction";
+import { getAllPokemon, getPokemon } from "./store/actions/pokemonAction";
 import { RootStore } from "./store/store";
 
 function App() {
@@ -12,10 +12,15 @@ function App() {
     setPokemonName(e.target.value);
 
   const handleSubmit = () => {
-    dispatch(getPoekmon(pokemonName));
+    dispatch(getPokemon(pokemonName));
   };
 
-  console.log(pokemon.pokemon);
+  // useEffect(() => {
+  //   if (!pokemon.loading) {
+  //     console.log("list not fetched");
+  //     dispatch(getAllPokemon());
+  //   }
+  // }, [pokemon.loading ==, dispatch]);
 
   return (
     <div>
